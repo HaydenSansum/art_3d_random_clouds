@@ -18,7 +18,7 @@ def return_dependent_offset(spread, offset, i):
     Use the spread value to create fixed points to return either a value or zero
     """
     move_cloud_check_num = 1/spread
-    if i % 100 == 0:
+    if i % move_cloud_check_num == 0:
         actual_offset = random.random() * offset
     else:
         actual_offset = 0
