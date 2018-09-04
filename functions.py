@@ -1,13 +1,24 @@
 import pandas as pd
 import random
 
-def return_offset(spread, offset):
+def return_independent_offset(spread, offset):
     """
     Return a point offset which is either 0 or a random value determines by the multiplier "offset"
     The chance of being either zero or the number is based on the value of "spread"
     """
     move_cloud_check_num = random.random()
     if move_cloud_check_num > (spread - 1):
+        actual_offset = random.random() * offset
+    else:
+        actual_offset = 0
+    return(actual_offset)
+
+def return_dependent_offset(spread, offset, i):
+    """
+    Use the spread value to create fixed points to return either a value or zero
+    """
+    move_cloud_check_num = 1/spread
+    if i % 100 == 0:
         actual_offset = random.random() * offset
     else:
         actual_offset = 0
@@ -23,7 +34,7 @@ def random_polarity_const():
         neg_const = -1
     return(neg_const)
 
-def create_random_points_list(n, spread, offset):
+def create_random_points_list(n, spread, offset, independent):
     """
     Create a single list of random points
     """
@@ -33,7 +44,10 @@ def create_random_points_list(n, spread, offset):
     # Produce n points
     for i in range(n):
         
-        actual_offset = return_offset(spread, offset)
+        if independent == True:
+            actual_offset = return_independent_offset(spread, offset)
+        else:
+            actual_offset = return_dependent_offset(spread, offset, i)
         
         # Create a random 50/50 chance to be positive or negative
         neg_const = random_polarity_const()
@@ -44,7 +58,7 @@ def create_random_points_list(n, spread, offset):
 
     return(points_out)
 
-def create_random_n_df_points(seed, n, dimensions, spread, offset):
+def create_random_n_df_points(seed, n, dimensions, spread, offset, independent=True):
     """
     Create a dataframe of random point lists
 
@@ -56,7 +70,7 @@ def create_random_n_df_points(seed, n, dimensions, spread, offset):
     list_of_point_lists = []
 
     for i in range(dimensions):
-        new_list = create_random_points_list(n, spread, offset)
+        new_list = create_random_points_list(n, spread, offset, independent)
         list_of_point_lists.append(new_list)
 
     df = pd.DataFrame(list_of_point_lists)
