@@ -73,5 +73,14 @@ def create_random_n_df_points(seed, n, dimensions, spread, offset, independent=T
         new_list = create_random_points_list(n, spread, offset, independent)
         list_of_point_lists.append(new_list)
 
+    # create dataframe names from a-...
+    names_list = []
+    names_list.append('a')
+    for i in range(dimensions - 1):
+        names_list.append(chr(ord(names_list[i])+1))
+        
     df = pd.DataFrame(list_of_point_lists)
+    df = df.transpose()
+    df.columns = names_list
+    
     return(df)
